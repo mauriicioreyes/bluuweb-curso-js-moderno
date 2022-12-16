@@ -1,12 +1,10 @@
 const cards = document.getElementById('cards')
-const items = document.getElementById('items');
+const items = document.getElementById('items')
 const footer = document.getElementById('footer')
 const templateCard = document.getElementById('template-card').content
-// console.log(templateCard);
-
 const templateFooter = document.getElementById('template-footer').content
 const templateCarrito = document.getElementById('template-carrito').content
-// console.log({cards, items, footer, templateCard, templateFooter, templateCarrito});
+// console.log({cards, items, footer, templateCard, templateFooter, templateCarrito})
 // console.log(templateCard)
 // console.log(templateCarrito)
 const fragment = document.createDocumentFragment()
@@ -16,7 +14,7 @@ let carrito = {}
 
 document.addEventListener('DOMContentLoaded', (e) => {
     fetchData()
-});
+})
 
 cards.addEventListener('click', e => {
     addCarrito(e)
@@ -79,20 +77,8 @@ const setCarrito = objeto => {
     // console.log(producto, carrito)
 }
 
-// const pintarCarrito = () => {
-//     console.log(carrito);
-//     Object.values(carrito).forEach(producto => {
-
-
-//         // templateCarrito.querySelector('th').textContent = producto.id
-//         // templateCarrito.querySelectorAll('td')[0].textContent = producto.title
-//         // templateCarrito.querySelectorAll()
-//     })
-    
-// }
-
 const pintarCarrito = () => {
-    console.log(carrito);
+    console.log(carrito)
     Object.values(carrito).forEach(producto => {
         items.innerHTML = ''
         templateCarrito.querySelector('th').textContent = producto.id
@@ -105,5 +91,27 @@ const pintarCarrito = () => {
         const clone = templateCarrito.cloneNode(true)
         fragment.appendChild(clone)
     })
-    items.appendChild(fragment);
+    items.appendChild(fragment)
+
+    pintarFooter()
+}
+
+const pintarFooter = () => {
+    footer.innerHTML = ''
+    if (Object.keys(carrito).length === 0) {
+        footer.innerHTML = `<th scope ="row" colspan="5">Carrito vacío - comience a comprar!</th>`
+    }
+
+    // Sumar cantidad y sumar totales
+    const nCantidad = Object.values(carrito).reduce((acumulador, {cantidad}) => acumulador + cantidad, 0)
+    const nPrecio = Object.values(carrito).reduce((acumulador, {cantidad, precio}) => acumulador + (cantidad * precio), 0)
+    console.log(nCantidad, nPrecio)
+
+    console.log(templateFooter)
+    templateFooter.querySelectorAll('td')[0].textContent = nCantidad
+    templateFooter.querySelector('span').textContent = nPrecio
+
+    const clone = templateFooter.cloneNode(true)
+    fragment.appendChild(clone)
+    footer.appendChild(fragment)
 }
